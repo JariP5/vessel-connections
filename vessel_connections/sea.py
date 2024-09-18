@@ -1,5 +1,5 @@
 from pydantic import field_validator
-from Equipment import Equipment
+from vessel_connections.Equipment import Equipment
 
 class Sea(Equipment):
     """Represents a sea connection in the vessel."""

@@ -37,3 +37,13 @@ class Equipment(BaseModel, ABC):
     def __str__(self) -> str:
         """Return a string representation of the equipment."""
         return f"{self.equipment_type().capitalize()} {self.id} connected to valves: {', '.join(self.connected_valves)}"
+
+    def __hash__(self):
+        """Make the equipment hashable based on its id."""
+        return hash(self.id)
+
+    def __eq__(self, other):
+        """Define equality based on id and type."""
+        if isinstance(other, Equipment):
+            return self.id == other.id and self.equipment_type() == other.equipment_type()
+        return False

@@ -1,20 +1,22 @@
 from typing import Dict, List, Union
-from Tank import Tank
-from Pipe import Pipe
-from Pump import Pump
-from Sea import Sea
-from Vessel import Vessel
+from pydantic import BaseModel
+from vessel_connections.Tank import Tank
+from vessel_connections.Pipe import Pipe
+from vessel_connections.Pump import Pump
+from vessel_connections.Sea import Sea
+from vessel_connections.Valve import Valve
+from vessel_connections.Vessel import Vessel
 
 VesselData = Dict[str, Union[str, Dict[str, List[str]]]]
 
-class VesselBuilder:
-    def __init__(self):
-        self.name: str = ""
-        self.version: str = ""
-        self.tanks: Dict[str, Tank] = {}
-        self.pipes: Dict[str, Pipe] = {}
-        self.pumps: Dict[str, Pump] = {}
-        self.sea_connections: Dict[str, Sea] = {}
+class VesselBuilder(BaseModel):
+    name: str = ""
+    version: str = ""
+    tanks: Dict[str, Tank] = {}
+    pipes: Dict[str, Pipe] = {}
+    pumps: Dict[str, Pump] = {}
+    sea_connections: Dict[str, Sea] = {}
+    valves: Dict[str, Valve] = {}
 
     def load_from_data(self, data: VesselData) -> 'VesselBuilder':
         self.set_name(str(data.get('vessel', '')))
@@ -23,6 +25,7 @@ class VesselBuilder:
         self._load_pipes(data.get('pipes', {}))
         self._load_pumps(data.get('pumps', {}))
         self._load_sea_connections(data.get('sea', {}))
+        self._load_valves()
         return self
 
     def set_name(self, name: str) -> 'VesselBuilder':
@@ -49,6 +52,14 @@ class VesselBuilder:
         for sea_type, valves in sea_data.items():
             self.add_sea_connection(Sea(id=str(sea_type), connected_valves=[str(v) for v in valves]))
 
+    def _load_valves(self):
+        for equipment_dict in [self.tanks, self.pipes, self.pumps, self.sea_connections]:
+            for equipment in equipment_dict.values():
+                for valve_id in equipment.connected_valves:
+                    if valve_id not in self.valves:
+                        self.valves[valve_id] = Valve(id=valve_id)
+                    self.valves[valve_id].add_connected_equipment(equipment)
+
     def add_tank(self, tank: Tank) -> 'VesselBuilder':
         self.tanks[tank.id] = tank
         return self
@@ -72,5 +83,6 @@ class VesselBuilder:
             tanks=self.tanks,
             pipes=self.pipes,
             pumps=self.pumps,
-            sea_connections=self.sea_connections
+            sea_connections=self.sea_connections,
+            valves=self.valves
         )

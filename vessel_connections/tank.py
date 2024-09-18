@@ -1,6 +1,5 @@
-from typing import List
 from pydantic import field_validator
-from Equipment import Equipment
+from vessel_connections.Equipment import Equipment
 
 class Tank(Equipment):
     """Represents a tank in the vessel."""
