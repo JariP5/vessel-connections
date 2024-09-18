@@ -1,11 +1,12 @@
 from typing import Dict, List
+from pydantic import BaseModel
 from Equipment import Equipment
 from Tank import Tank
 from Pipe import Pipe
 from Pump import Pump
 from Sea import Sea
 
-class Vessel:
+class Vessel(BaseModel):
     name: str
     version: str
     tanks: Dict[str, Tank]
