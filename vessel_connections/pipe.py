@@ -4,6 +4,6 @@ from vessel_connections.Equipment import Equipment
 class Pipe(Equipment):
     """Represents a pipe in the vessel."""
 
-    def equipment_type(self) -> str:
+    def get_equipment_type(self) -> str:
         """Return the type of equipment."""
         return "pipe"

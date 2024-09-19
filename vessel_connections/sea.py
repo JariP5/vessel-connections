@@ -11,6 +11,6 @@ class Sea(Equipment):
             raise ValueError('Sea connection ID must be either "overboard" or "seachest"')
         return v
 
-    def equipment_type(self) -> str:
+    def get_equipment_type(self) -> str:
         """Return the type of equipment."""
         return "sea"

@@ -1,59 +1,74 @@
-from typing import Dict, List, Set
+from typing import List, Set, Optional
+from pydantic import BaseModel
+from vessel_connections.Vessel import Vessel
 from vessel_connections.Equipment import Equipment
 
-class ConnectionAnalyzer:
-    def __init__(self, vessel):
-        self.vessel = vessel
+class ConnectionAnalyzer(BaseModel):
+    vessel: Vessel
 
-    def find_connected_equipment(self, open_valve_ids: Set[str]) -> Dict[str, Set[str]]:
-        """
-        Find equipment connected to each piece of equipment through open valves.
+    def analyze_connections(self) -> List[Set[Equipment]]:
+        """Analyze and return the equipment connections based on valve states."""
+        visited = set()  # To keep track of visited equipment
+        connections = []  # To store the list of connected equipment sets
 
-        :param open_valve_ids: Set of IDs of open valves
-        :return: Dictionary with equipment IDs as keys and sets of connected equipment IDs as values
-        """
-        connections = {}
-        all_equipment = {**self.vessel.tanks, **self.vessel.pipes,
-                         **self.vessel.pumps, **self.vessel.sea_connections}
-
-        for eq_id, equipment in all_equipment.items():
-            connected = self._find_connected_recursive(equipment, open_valve_ids, set())
-            if connected:
-                connections[eq_id] = connected
+        # Iterate over all equipment and perform DFS if not visited
+        for valve in self.vessel.valves.values():
+            if valve.is_open:
+                for equipment in valve.connected_equipment:
+                    if equipment not in visited:
+                        # Find all connected equipment from this starting point
+                        connected_set = self._find_connected_equipment(equipment, visited)
+                        if connected_set:
+                            connections.append(connected_set)
 
         return connections
 
-    def _find_connected_recursive(self, equipment: Equipment, open_valve_ids: Set[str], visited: Set[str]) -> Set[str]:
-        connected = set()
-        visited.add(equipment.id)
+    def _find_connected_equipment(self, start_eq: Equipment, visited: Set[Equipment]) -> Set[Equipment]:
+        """Perform DFS to find all equipment connected to the start_eq."""
+        stack = [start_eq]
+        connected_equipment = set()
 
-        for valve_id in equipment.connected_valves:
-            if valve_id in open_valve_ids:
-                valve = self.vessel.valves[valve_id]
-                for connected_eq in valve.connected_equipment:
-                    if connected_eq.id not in visited:
-                        connected.add(connected_eq.id)
-                        connected.update(self._find_connected_recursive(connected_eq, open_valve_ids, visited))
+        while stack:
+            eq = stack.pop()
+            if eq not in visited:
+                visited.add(eq)
+                connected_equipment.add(eq)
 
-        return connected
+                # Check which valves are open and lead to other equipment
+                for valve in self.vessel.valves.values():
+                    if valve.is_open and eq in valve.connected_equipment:
+                        # Add all connected equipment to the stack for further traversal
+                        stack.extend(valve.connected_equipment - {eq})  # Exclude the current equipment
 
-    # def is_path_exists(self, start_id: int,  start_type: str, end_id: int, end_type: str, open_valve_ids: Set[str]) -> bool:
-    #     """
-    #     Check if there's a path between two pieces of equipment through open valves.
-    #
-    #     :param start_id: ID of the starting equipment
-    #     :param end_id: ID of the ending equipment
-    #     :param s: ID of the starting equipment
-    #     :param end_id: ID of the ending equipment
-    #     :param open_valve_ids: Set of IDs of open valves
-    #     :return: True if a path exists, False otherwise
-    #     """
-    #     all_equipment = {**self.vessel.tanks, **self.vessel.pipes,
-    #                      **self.vessel.pumps, **self.vessel.sea_connections}
-    #
-    #     start_equipment = all_equipment.get(start_id)
-    #     if not start_equipment:
-    #         return False
-    #
-    #     connected = self._find_connected_recursive(start_equipment, open_valve_ids, set())
-    #     return end_id in connected
+        return connected_equipment
+
+    def is_equipment_connected(self, type1: str, id1: str, type2: str, id2: str) -> bool:
+        """Check if two equipment parts are connected based on their type and ID."""
+        eq1 = self.vessel.get_equipment(type1, id1)
+        eq2 = self.vessel.get_equipment(type2, id2)
+
+        if eq1 and eq2:
+            # Perform DFS to check if eq1 and eq2 are connected
+            visited = set()
+            stack = [eq1]
+
+            while stack:
+                current_eq = stack.pop()
+                print(current_eq)
+                if current_eq == eq2:
+                    return True
+                if current_eq not in visited:
+                    visited.add(current_eq)
+                    for valve in self.vessel.valves.values():
+                        if valve.is_open and current_eq in valve.connected_equipment:
+                            stack.extend(valve.connected_equipment - {current_eq})
+
+        return False
+
+    def print_connected_sets(self):
+        """Print the connected sets of equipment."""
+        connections = self.analyze_connections()
+        print("Connected equipment sets based on valve states:")
+        for i, connected_set in enumerate(connections, 1):
+            equipment_info = [f"{eq.get_equipment_type().capitalize()} {eq.id}" for eq in connected_set]
+            print(f"Set {i}: {', '.join(equipment_info)}")

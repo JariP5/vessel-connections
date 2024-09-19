@@ -42,17 +42,39 @@ class Vessel(BaseModel):
     def open_valve(self, valve_id: str):
         if valve_id in self.valves:
             self.valves[valve_id].open()
+        else:
+            print(f"Valve with id {valve_id} was not found and could not be opened.")
 
     def close_valve(self, valve_id: str):
         if valve_id in self.valves:
             self.valves[valve_id].close()
+        else:
+            print(f"Valve with id {valve_id} was not found and could not be closed.")
 
     def close_all_valves(self):
         for valve in self.valves.values():
             valve.close()
 
+    def set_only_open_valves(self, valve_ids: List[str]):
+        """Open valves specified in the list and close all others."""
+        for valve_id, valve in self.valves.items():
+            if valve_id in valve_ids:
+                valve.open()
+            else:
+                valve.close()
+
     def is_valve_open(self, valve_id: str) -> bool:
         return self.valves[valve_id].is_open
+
+    def print_open_valves(self):
+        """Print all open valves."""
+        open_valves_ids = [valve.id for valve in self.valves.values() if valve.is_open]
+
+        if open_valves_ids:
+            open_valves_str = ', '.join(open_valves_ids)  # Join IDs with comma and space
+            print(f"Open valves: {open_valves_str}\n")
+        else:
+            print("No valves are currently open.\n")
 
     def __str__(self) -> str:
         """Return a string representation of the vessel."""
@@ -61,4 +83,4 @@ class Vessel(BaseModel):
                 f"Pipes: {len(self.pipes)}\n"
                 f"Pumps: {len(self.pumps)}\n"
                 f"Sea Connections: {len(self.sea_connections)}\n"
-                f"Valves: {len(self.valves)}")
+                f"Valves: {len(self.valves)}\n")
