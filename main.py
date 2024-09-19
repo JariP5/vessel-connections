@@ -1,9 +1,9 @@
-from vessel_connections.DataLoader import DataLoader
-from vessel_connections.ConnectionAnalyzer import ConnectionAnalyzer
-from vessel_connections.vessel.VesselBuilder import VesselBuilder
+from vessel_connections.data_loader import DataLoader
+from vessel_connections.connection_analyzer import ConnectionAnalyzer
+from vessel_connections.vessel.vessel_builder import VesselBuilder
 
 # Scenario number to test different valve states
-SCENARIO = 8
+SCENARIO = 1
 
 def main():
     """Main function to execute different scenarios based on valve settings."""

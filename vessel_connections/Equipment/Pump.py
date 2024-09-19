@@ -1,4 +1,4 @@
-from vessel_connections.equipment.Equipment import Equipment
+from vessel_connections.equipment.equipment import Equipment
 
 class Pump(Equipment):
 

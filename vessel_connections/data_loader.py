@@ -34,7 +34,7 @@ class DataLoader:
             not isinstance(data['version'], str)):
             return False
 
-        equipment_types = ['tanks', 'pipes', 'pumps']
+        equipment_types = ['tanks', 'pipes', 'pumps', 'sea']
         for eq_type in equipment_types:
             if not isinstance(data[eq_type], dict):
                 return False
@@ -43,13 +43,5 @@ class DataLoader:
                     return False
                 if not all(isinstance(v, str) for v in value):
                     return False
-
-        if not isinstance(data['sea'], dict):
-            return False
-        for key, value in data['sea'].items():
-            if not isinstance(key, str) or not isinstance(value, list):
-                return False
-            if not all(isinstance(v, str) for v in value):
-                return False
 
         return True

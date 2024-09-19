@@ -1,11 +1,11 @@
 from typing import Dict, List, Union
 from pydantic import BaseModel
-from vessel_connections.equipment.Tank import Tank
-from vessel_connections.equipment.Pipe import Pipe
-from vessel_connections.equipment.Pump import Pump
-from vessel_connections.equipment.Sea import Sea
-from vessel_connections.Valve import Valve
-from vessel_connections.vessel.Vessel import Vessel
+from vessel_connections.equipment.tank import Tank
+from vessel_connections.equipment.pipe import Pipe
+from vessel_connections.equipment.pump import Pump
+from vessel_connections.equipment.sea import Sea
+from vessel_connections.valve import Valve
+from vessel_connections.vessel.vessel import Vessel
 
 VesselData = Dict[str, Union[str, Dict[str, List[str]]]]
 

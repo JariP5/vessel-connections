@@ -1,6 +1,6 @@
 from typing import Set
 from pydantic import BaseModel, field_validator
-from vessel_connections.equipment.Equipment import Equipment
+from vessel_connections.equipment.equipment import Equipment
 
 class Valve(BaseModel):
     id: str
