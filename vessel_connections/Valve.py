@@ -1,11 +1,18 @@
 from typing import Set
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from vessel_connections.Equipment import Equipment
 
 class Valve(BaseModel):
-    id: int
+    id: str
     is_open: bool = False
     connected_equipment: Set[Equipment] = set()
+
+    @field_validator('id')
+    def validate_id(cls, v: str) -> str:
+        """Validate that the equipment ID is not empty or only whitespace."""
+        if not v.strip():  # Checks if the string is empty or only contains whitespace
+            raise ValueError('ID must not be empty or consist solely of whitespace.')
+        return v
 
     def open(self):
         self.is_open = True

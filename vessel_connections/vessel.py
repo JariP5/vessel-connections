@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from pydantic import BaseModel
 from vessel_connections.Equipment import Equipment
 from vessel_connections.Pump import Pump
@@ -15,6 +15,22 @@ class Vessel(BaseModel):
     pumps: Dict[str, Pump]
     sea_connections: Dict[str, Sea]
     valves: Dict[str, Valve] = {}
+
+    def get_equipment(self, eq_type: str, eq_id: str) -> Optional[Equipment]:
+        """Get equipment based on type and ID."""
+        equipment_dict = {
+            'tank': self.tanks,
+            'pipe': self.pipes,
+            'pump': self.pumps,
+            'sea': self.sea_connections,
+        }
+
+        if eq_type.lower() not in equipment_dict:
+            print(f"Invalid equipment type: {eq_type}.")
+            print(f"Must be tank, pipe, pump or sea.")
+            return None
+
+        return equipment_dict[eq_type.lower()].get(eq_id)
 
     def get_all_equipment(self) -> List[Equipment]:
         """Return a list of all equipment in the vessel."""

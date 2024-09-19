@@ -38,26 +38,51 @@ class VesselBuilder(BaseModel):
 
     def _load_tanks(self, tanks_data: Dict[str, List[str]]):
         for tank_id, valves in tanks_data.items():
-            self.add_tank(Tank(id=str(tank_id), connected_valves=[str(v) for v in valves]))
+            try:
+                # Attempt to create a Tank and add it
+                tank = Tank(id=str(tank_id), connected_valves=[str(v) for v in valves])
+                self.add_tank(tank)
+            except ValueError as e:
+                print(f"Error creating tank with ID '{tank_id}': {e}")
 
     def _load_pipes(self, pipes_data: Dict[str, List[str]]):
         for pipe_id, valves in pipes_data.items():
-            self.add_pipe(Pipe(id=str(pipe_id), connected_valves=[str(v) for v in valves]))
+            try:
+                # Attempt to create a Pipe and add it
+                pipe = Pipe(id=str(pipe_id), connected_valves=[str(v) for v in valves])
+                self.add_pipe(pipe)
+            except ValueError as e:
+                print(f"Error creating pipe with ID '{pipe_id}': {e}")
 
     def _load_pumps(self, pumps_data: Dict[str, List[str]]):
         for pump_id, valves in pumps_data.items():
-            self.add_pump(Pump(id=str(pump_id), connected_valves=[str(v) for v in valves]))
+            try:
+                # Attempt to create a Pump and add it
+                pump = Pump(id=str(pump_id), connected_valves=[str(v) for v in valves])
+                self.add_pump(pump)
+            except ValueError as e:
+                print(f"Error creating pump with ID '{pump_id}': {e}")
 
     def _load_sea_connections(self, sea_data: Dict[str, List[str]]):
         for sea_type, valves in sea_data.items():
-            self.add_sea_connection(Sea(id=str(sea_type), connected_valves=[str(v) for v in valves]))
+            try:
+                # Attempt to create a Sea and add it
+                sea = Sea(id=str(sea_type), connected_valves=[str(v) for v in valves])
+                self.add_sea_connection(sea)
+            except ValueError as e:
+                print(f"Error creating sea with ID '{sea_type}': {e}")
 
     def _load_valves(self):
         for equipment_dict in [self.tanks, self.pipes, self.pumps, self.sea_connections]:
             for equipment in equipment_dict.values():
                 for valve_id in equipment.connected_valves:
                     if valve_id not in self.valves:
-                        self.valves[valve_id] = Valve(id=valve_id)
+                        try:
+                            # Attempt to create a Valve
+                            valve = Valve(id=valve_id)
+                            self.valves[valve_id] = valve
+                        except ValueError as e:
+                            print(f"Error creating valve with ID '{valve_id}': {e}")
                     self.valves[valve_id].add_connected_equipment(equipment)
 
     def add_tank(self, tank: Tank) -> 'VesselBuilder':

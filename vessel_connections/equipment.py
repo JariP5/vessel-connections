@@ -6,7 +6,14 @@ class Equipment(BaseModel, ABC):
     """Abstract base class for vessel equipment."""
 
     id: str
-    connected_valves: List[str]
+    connected_valves: List[str] = []
+
+    @field_validator('id')
+    def validate_id(cls, v: str) -> str:
+        """Validate that the equipment ID is not empty or only whitespace."""
+        if not v.strip():  # Checks if the string is empty or only contains whitespace
+            raise ValueError('ID must not be empty or consist solely of whitespace.')
+        return v
 
     @field_validator('connected_valves')
     def check_connected_valves(cls, v: List[str]) -> List[str]:
@@ -14,12 +21,6 @@ class Equipment(BaseModel, ABC):
         if not v:
             raise ValueError('Connected valves must not be empty')
         return v
-
-    @abstractmethod
-    @field_validator('id')
-    def validate_id(cls, v: str) -> str:
-        """Validate the equipment ID."""
-        pass
 
     @abstractmethod
     def equipment_type(self) -> str:
@@ -30,9 +31,9 @@ class Equipment(BaseModel, ABC):
         """Return a list of valves connected to this equipment."""
         return self.connected_valves
 
-    def is_connected_to_valve(self, valve: str) -> bool:
+    def is_connected_to_valve(self, valve_id: str) -> bool:
         """Check if the equipment is connected to a specific valve."""
-        return valve in self.connected_valves
+        return valve_id in self.connected_valves
 
     def __str__(self) -> str:
         """Return a string representation of the equipment."""
