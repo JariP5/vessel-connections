@@ -1,10 +1,6 @@
 import unittest
-
-from vessel_connections.equipment.equipment import Equipment
 from vessel_connections.valve import Valve
 from vessel_connections.equipment.tank import Tank
-from vessel_connections.equipment.sea import Sea
-
 
 class TestValve(unittest.TestCase):
 
