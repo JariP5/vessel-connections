@@ -1,7 +1,7 @@
-from typing import List, Set, Optional
+from typing import List, Set
 from pydantic import BaseModel
-from vessel_connections.Vessel import Vessel
-from vessel_connections.Equipment import Equipment
+from vessel_connections.Equipment.Equipment import Equipment
+from vessel_connections.vessel.Vessel import Vessel
 
 class ConnectionAnalyzer(BaseModel):
     vessel: Vessel

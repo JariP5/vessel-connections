@@ -1,5 +1,4 @@
-from pydantic import field_validator
-from vessel_connections.Equipment import Equipment
+from vessel_connections.Equipment.Equipment import Equipment
 
 class Pipe(Equipment):
     """Represents a pipe in the vessel."""

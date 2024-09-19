@@ -1,6 +1,6 @@
 from vessel_connections.DataLoader import DataLoader
-from vessel_connections.VesselBuilder import VesselBuilder
 from vessel_connections.ConnectionAnalyzer import ConnectionAnalyzer
+from vessel_connections.vessel.VesselBuilder import VesselBuilder
 
 # Number from 1 to 10 to test different valve states
 SCENARIO = 10
@@ -10,7 +10,7 @@ def main():
     data_loader = DataLoader()
 
     # Load data from yml file
-    vessel_data = data_loader.load('../settings/vessel.yml')
+    vessel_data = data_loader.load('settings/vessel.yml')
 
     if vessel_data is None:
         print("Exiting.")
