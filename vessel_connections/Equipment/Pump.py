@@ -1,4 +1,4 @@
-from vessel_connections.Equipment.Equipment import Equipment
+from vessel_connections.equipment.Equipment import Equipment
 
 class Pump(Equipment):
     """Represents a pump in the vessel."""

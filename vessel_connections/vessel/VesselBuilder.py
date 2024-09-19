@@ -1,9 +1,9 @@
 from typing import Dict, List, Union
 from pydantic import BaseModel
-from vessel_connections.Equipment.Tank import Tank
-from vessel_connections.Equipment.Pipe import Pipe
-from vessel_connections.Equipment.Pump import Pump
-from vessel_connections.Equipment.Sea import Sea
+from vessel_connections.equipment.Tank import Tank
+from vessel_connections.equipment.Pipe import Pipe
+from vessel_connections.equipment.Pump import Pump
+from vessel_connections.equipment.Sea import Sea
 from vessel_connections.Valve import Valve
 from vessel_connections.vessel.Vessel import Vessel
 

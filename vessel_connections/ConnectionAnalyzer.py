@@ -1,6 +1,6 @@
 from typing import List, Set
 from pydantic import BaseModel
-from vessel_connections.Equipment.Equipment import Equipment
+from vessel_connections.equipment.Equipment import Equipment
 from vessel_connections.vessel.Vessel import Vessel
 
 class ConnectionAnalyzer(BaseModel):

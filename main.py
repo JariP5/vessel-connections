@@ -2,14 +2,15 @@ from vessel_connections.DataLoader import DataLoader
 from vessel_connections.ConnectionAnalyzer import ConnectionAnalyzer
 from vessel_connections.vessel.VesselBuilder import VesselBuilder
 
-# Number from 1 to 10 to test different valve states
+# Scenario number to test different valve states
 SCENARIO = 10
 
 def main():
+    """Main function to execute different scenarios based on valve settings."""
     # Create a data loader
     data_loader = DataLoader()
 
-    # Load data from yml file
+    # Load data from YAML file
     vessel_data = data_loader.load('settings/vessel.yml')
 
     if vessel_data is None:
@@ -25,7 +26,7 @@ def main():
     # Create analyzer to understand connections for different valve settings
     analyzer = ConnectionAnalyzer(vessel=vessel)
 
-    # Different Scenarios to see how program reacts two different valve settings
+    # Execute different scenarios
     if SCENARIO == 1:
         vessel.open_valve('001')
         vessel.open_valve('002')
@@ -63,14 +64,14 @@ def main():
         vessel.close_valve('015')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
-        is_connected = analyzer.is_equipment_connected(type1="tank", id1="001", type2="pipe", id2="010")
+        is_connected = analyzer.is_equipment_connected(
+            type1="tank", id1="001", type2="pipe", id2="010")
         print(f"Equipment connected: {is_connected}")
 
     elif SCENARIO == 6:
         vessel.open_valve('999')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
-
 
     elif SCENARIO == 7:
         vessel.close_all_valves()
@@ -99,7 +100,8 @@ def main():
         vessel.open_valve('013')
         vessel.open_valve('017')
         vessel.print_open_valves()
-        is_connected = analyzer.is_equipment_connected(type1="tank", id1="002", type2="pump", id2="01")
+        is_connected = analyzer.is_equipment_connected(
+            type1="tank", id1="002", type2="pump", id2="01")
         print(f"Equipment connected: {is_connected}")
 
     elif SCENARIO == 10:
