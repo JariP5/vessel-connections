@@ -1,5 +1,6 @@
 from typing import Dict, List, Union
 from pydantic import BaseModel
+from vessel_connections.equipment.equipment import Equipment
 from vessel_connections.equipment.tank import Tank
 from vessel_connections.equipment.pipe import Pipe
 from vessel_connections.equipment.pump import Pump
@@ -69,19 +70,21 @@ class VesselBuilder(BaseModel):
                 print(f"Error creating sea with ID '{sea_type}': {e}")
 
     def _load_valves(self):
+        """Load valves and associate them with equipment."""
         for equipment_dict in [self.tanks, self.pipes, self.pumps, self.sea_connections]:
             for equipment in equipment_dict.values():
                 for valve_id in equipment.connected_valves_ids:
-                    if valve_id not in self.valves:
-                        try:
-                            valve = Valve(id=valve_id)
-                            self.valves[valve_id] = valve
-                            self.valves[valve_id].add_connected_equipment(equipment)
-                        except ValueError as e:
-                            print(f"Error creating valve with ID '{valve_id}': {e}")
-                    else:
-                        self.valves[valve_id].add_connected_equipment(equipment)
+                    self._create_or_update_valve(valve_id, equipment)
 
+    def _create_or_update_valve(self, valve_id: str, equipment: Equipment):
+        if valve_id not in self.valves:
+            try:
+                valve = Valve(id=valve_id)
+                self.valves[valve_id] = valve
+            except ValueError as e:
+                print(f"Error creating valve with ID '{valve_id}': {e}")
+                return
+        self.valves[valve_id].add_connected_equipment(equipment)
 
     def add_tank(self, tank: Tank) -> 'VesselBuilder':
         self.tanks[tank.id] = tank
