@@ -86,8 +86,10 @@ invalid_data: VesselData = {
 }
 
 class TestDataLoader(unittest.TestCase):
-    valid_data: VesselData = valid_data
-    invalid_data: VesselData = invalid_data
+
+    def setUp(self):
+        self.valid_data = valid_data
+        self.invalid_data = invalid_data
 
     @patch('builtins.open', new_callable=mock_open, read_data=yaml.dump(valid_data))
     def test_load_valid_data(self, mock_file):
@@ -113,6 +115,3 @@ class TestDataLoader(unittest.TestCase):
 
     def test_validate_vessel_data_invalid(self):
         self.assertFalse(DataLoader._validate_vessel_data(self.invalid_data))
-
-if __name__ == '__main__':
-    unittest.main()
