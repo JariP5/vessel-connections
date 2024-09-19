@@ -9,19 +9,18 @@ class Valve(BaseModel):
 
     @field_validator('id')
     def validate_id(cls, v: str) -> str:
-        """Validate that the equipment ID is not empty or only whitespace."""
-        if not v.strip():  # Checks if the string is empty or only contains whitespace
+        if not v.strip():
             raise ValueError('ID must not be empty or consist solely of whitespace.')
         return v
 
-    def open(self):
+    def open(self) -> None:
         self.is_open = True
 
-    def close(self):
+    def close(self) -> None:
         self.is_open = False
 
-    def add_connected_equipment(self, equipment: Equipment):
+    def add_connected_equipment(self, equipment: Equipment) -> None:
         self.connected_equipment.add(equipment)
 
-    def __str__(self):
-        return f"Valve {self.id} is {'open' if self.is_open else 'closed'}."
+    def __str__(self) -> str:
+        return f'Valve {self.id} is {'open' if self.is_open else 'closed'}.'

@@ -17,7 +17,6 @@ class Vessel(BaseModel):
     valves: Dict[str, Valve] = {}
 
     def get_equipment(self, eq_type: str, eq_id: str) -> Optional[Equipment]:
-        """Get equipment based on type and ID."""
         equipment_dict = {
             'tank': self.tanks,
             'pipe': self.pipes,
@@ -33,7 +32,6 @@ class Vessel(BaseModel):
         return equipment_dict[eq_type.lower()].get(eq_id)
 
     def get_all_equipment(self) -> List[Equipment]:
-        """Return a list of all equipment in the vessel."""
         return (list(self.tanks.values()) +
                 list(self.pipes.values()) +
                 list(self.pumps.values()) +
@@ -67,7 +65,6 @@ class Vessel(BaseModel):
         return self.valves[valve_id].is_open
 
     def print_open_valves(self):
-        """Print all open valves."""
         open_valves_ids = [valve.id for valve in self.valves.values() if valve.is_open]
 
         if open_valves_ids:
@@ -77,7 +74,6 @@ class Vessel(BaseModel):
             print("No valves are currently open.\n")
 
     def __str__(self) -> str:
-        """Return a string representation of the vessel."""
         return (f"Vessel: {self.name} (Version: {self.version})\n"
                 f"Tanks: {len(self.tanks)}\n"
                 f"Pipes: {len(self.pipes)}\n"

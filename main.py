@@ -14,7 +14,7 @@ def main():
     vessel_data = data_loader.load('settings/vessel.yml')
 
     if vessel_data is None:
-        print("Exiting.")
+        print('Exiting.')
         return
 
     # Create a vessel from the loaded data
@@ -65,8 +65,8 @@ def main():
         vessel.print_open_valves()
         analyzer.print_connected_sets()
         is_connected = analyzer.is_equipment_connected(
-            type1="tank", id1="001", type2="pipe", id2="010")
-        print(f"Equipment connected: {is_connected}")
+            type1='tank', id1='001', type2='pipe', id2='010')
+        print(f'Equipment connected: {is_connected}')
 
     elif SCENARIO == 6:
         vessel.open_valve('999')
@@ -101,8 +101,8 @@ def main():
         vessel.open_valve('017')
         vessel.print_open_valves()
         is_connected = analyzer.is_equipment_connected(
-            type1="tank", id1="002", type2="pump", id2="01")
-        print(f"Equipment connected: {is_connected}")
+            type1='tank', id1='002', type2='pump', id2='01')
+        print(f'Equipment connected: {is_connected}')
 
     elif SCENARIO == 10:
         vessel.open_valve('001')
@@ -115,7 +115,7 @@ def main():
         analyzer.print_connected_sets()
 
     else:
-        print("Invalid scenario.")
+        print('Invalid scenario.')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

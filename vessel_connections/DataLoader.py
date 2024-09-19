@@ -4,9 +4,10 @@ from typing import Any, Dict, List, Union, Optional
 VesselData = Dict[str, Union[str, Dict[str, List[str]]]]
 
 class DataLoader:
+    """Class to handle loading and validating YAML data for vessel configurations."""
+
     @staticmethod
     def load(file_path: str) -> Optional[VesselData]:
-        """Read and return a yml file for specified file path."""
         try:
             with open(file_path, 'r') as file:
                 data = yaml.safe_load(file)

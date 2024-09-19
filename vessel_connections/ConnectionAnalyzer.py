@@ -7,9 +7,14 @@ class ConnectionAnalyzer(BaseModel):
     vessel: Vessel
 
     def analyze_connections(self) -> List[Set[Equipment]]:
-        """Analyze and return the equipment connections based on valve states."""
-        visited = set()  # To keep track of visited equipment
-        connections = []  # To store the list of connected equipment sets
+        """
+        Analyze the equipment connections based on the state of the valves.
+
+        Returns:
+            List[Set[Equipment]]: A list of sets, each representing a group of connected equipment.
+        """
+        visited = set()
+        connections = []
 
         # Iterate over all equipment and perform DFS if not visited
         for valve in self.vessel.valves.values():
@@ -24,7 +29,7 @@ class ConnectionAnalyzer(BaseModel):
         return connections
 
     def _find_connected_equipment(self, start_eq: Equipment, visited: Set[Equipment]) -> Set[Equipment]:
-        """Perform DFS to find all equipment connected to the start_eq."""
+        """Perform DFS to find all equipment connected to the start equipment."""
         stack = [start_eq]
         connected_equipment = set()
 
@@ -43,7 +48,6 @@ class ConnectionAnalyzer(BaseModel):
         return connected_equipment
 
     def is_equipment_connected(self, type1: str, id1: str, type2: str, id2: str) -> bool:
-        """Check if two equipment parts are connected based on their type and ID."""
         eq1 = self.vessel.get_equipment(type1, id1)
         eq2 = self.vessel.get_equipment(type2, id2)
 
@@ -65,12 +69,11 @@ class ConnectionAnalyzer(BaseModel):
         return False
 
     def print_connected_sets(self):
-        """Print the connected sets of equipment."""
         connections = self.analyze_connections()
-        print("Connected equipment sets based on valve states:")
+        print('Connected equipment sets based on valve states:')
         if len(connections) == 0:
-            print("No connected equipment.")
+            print('No connected equipment.')
         for i, connected_set in enumerate(connections, 1):
             sorted_equipment = sorted(connected_set, key=lambda eq: (eq.get_equipment_type(), eq.id))
-            equipment_info = [f"{eq.get_equipment_type().capitalize()} {eq.id}" for eq in sorted_equipment]
-            print(f"Set {i}: {', '.join(equipment_info)}")
+            equipment_info = [f'{eq.get_equipment_type().capitalize()} {eq.id}' for eq in sorted_equipment]
+            print(f'Set {i}: {', '.join(equipment_info)}')
