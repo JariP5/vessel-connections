@@ -76,9 +76,12 @@ class VesselBuilder(BaseModel):
                         try:
                             valve = Valve(id=valve_id)
                             self.valves[valve_id] = valve
+                            self.valves[valve_id].add_connected_equipment(equipment)
                         except ValueError as e:
                             print(f"Error creating valve with ID '{valve_id}': {e}")
-                    self.valves[valve_id].add_connected_equipment(equipment)
+                    else:
+                        self.valves[valve_id].add_connected_equipment(equipment)
+
 
     def add_tank(self, tank: Tank) -> 'VesselBuilder':
         self.tanks[tank.id] = tank
