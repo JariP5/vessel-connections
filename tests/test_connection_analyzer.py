@@ -44,7 +44,6 @@ class TestConnectionAnalyzer(unittest.TestCase):
 
     def test_analyze_connections(self):
         connections = self.analyzer.analyze_connections()
-        print(connections)
         self.assertEqual(len(connections), 2)
         self.assertEqual(connections[0], {self.pump1, self.tank1})
         self.assertEqual(connections[1], {self.pump2})
@@ -60,6 +59,7 @@ class TestConnectionAnalyzer(unittest.TestCase):
                 'pump', '001', 'pump', '002'
             )
         )
+
     @patch('sys.stdout', new_callable=StringIO)
     def test_print_connected_sets(self, mock_stdout):
         self.analyzer.print_connected_sets()

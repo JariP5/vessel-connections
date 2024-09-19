@@ -3,7 +3,7 @@ from vessel_connections.connection_analyzer import ConnectionAnalyzer
 from vessel_connections.vessel.vessel_builder import VesselBuilder
 
 # Scenario number to test different valve states
-SCENARIO = 9
+SCENARIO = 1
 
 def main():
     """Main function to execute different scenarios based on valve settings."""
@@ -33,7 +33,7 @@ def main():
         vessel.open_valve('010')
         vessel.open_valve('015')
         vessel.open_valve('023')
-        vessel.open_valve('033')
+        vessel.open_valve('033')  # Not existing valve id
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
@@ -69,7 +69,7 @@ def main():
         print(f'Equipment connected: {is_connected}')
 
     elif SCENARIO == 6:
-        vessel.open_valve('999')
+        vessel.open_valve('999')  # Not existing valve id
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
