@@ -1,9 +1,9 @@
 from vessel_connections.DataLoader import DataLoader
-from vessel_connections.Vessel import Vessel
 from vessel_connections.VesselBuilder import VesselBuilder
 from vessel_connections.ConnectionAnalyzer import ConnectionAnalyzer
 
-SCENARIO = 1
+# Number from 1 to 10 to test different valve states
+SCENARIO = 10
 
 def main():
     # Create a data loader
@@ -25,69 +25,90 @@ def main():
     # Create analyzer to understand connections for different valve settings
     analyzer = ConnectionAnalyzer(vessel=vessel)
 
-    is_connected = analyzer.is_equipment_connected(type1="tank", id1="001", type2="pipe", id2="002")
-    print(f"Equipment connected: {is_connected}")
-
-    # Scenarios
+    # Different Scenarios to see how program reacts two different valve settings
     if SCENARIO == 1:
         vessel.open_valve('001')
         vessel.open_valve('002')
         vessel.open_valve('010')
         vessel.open_valve('015')
+        vessel.open_valve('023')
+        vessel.open_valve('033')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 2:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.close_all_valves()
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 3:
         vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.close_valve('001')
+        vessel.close_valve('010')
+        vessel.close_valve('015')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 4:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('001')
+        vessel.open_valve('004')
+        vessel.open_valve('007')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 5:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('010')
+        vessel.open_valve('015')
+        vessel.close_valve('001')
+        vessel.close_valve('015')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
+        is_connected = analyzer.is_equipment_connected(type1="tank", id1="001", type2="pipe", id2="010")
+        print(f"Equipment connected: {is_connected}")
 
     elif SCENARIO == 6:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('999')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
+
     elif SCENARIO == 7:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.close_all_valves()
+        vessel.print_open_valves()
+        analyzer.print_connected_sets()
+        print()
+        for valve_id in vessel.valves:
+            vessel.open_valve(valve_id)
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 8:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('003')
+        vessel.open_valve('008')
+        vessel.open_valve('014')
+        vessel.close_valve('001')
+        vessel.close_valve('002')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 
     elif SCENARIO == 9:
         vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('003')
+        vessel.open_valve('005')
+        vessel.open_valve('007')
+        vessel.open_valve('013')
+        vessel.open_valve('017')
         vessel.print_open_valves()
-        analyzer.print_connected_sets()
+        is_connected = analyzer.is_equipment_connected(type1="tank", id1="002", type2="pump", id2="01")
+        print(f"Equipment connected: {is_connected}")
 
     elif SCENARIO == 10:
-        vessel.open_valve('002')
-        vessel.set_only_open_valves(['001', '004'])
+        vessel.open_valve('001')
+        vessel.print_open_valves()
+        analyzer.print_connected_sets()
+        print()
+        vessel.close_valve('001')
+        vessel.open_valve('004')
         vessel.print_open_valves()
         analyzer.print_connected_sets()
 

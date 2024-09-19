@@ -54,7 +54,6 @@ class ConnectionAnalyzer(BaseModel):
 
             while stack:
                 current_eq = stack.pop()
-                print(current_eq)
                 if current_eq == eq2:
                     return True
                 if current_eq not in visited:
@@ -69,6 +68,9 @@ class ConnectionAnalyzer(BaseModel):
         """Print the connected sets of equipment."""
         connections = self.analyze_connections()
         print("Connected equipment sets based on valve states:")
+        if len(connections) == 0:
+            print("No connected equipment.")
         for i, connected_set in enumerate(connections, 1):
-            equipment_info = [f"{eq.get_equipment_type().capitalize()} {eq.id}" for eq in connected_set]
+            sorted_equipment = sorted(connected_set, key=lambda eq: (eq.get_equipment_type(), eq.id))
+            equipment_info = [f"{eq.get_equipment_type().capitalize()} {eq.id}" for eq in sorted_equipment]
             print(f"Set {i}: {', '.join(equipment_info)}")
